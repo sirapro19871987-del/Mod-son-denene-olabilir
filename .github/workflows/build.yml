@@ -1,0 +1,28 @@
+name: Build Minecraft Mod
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodlari Indir
+        uses: actions/checkout@v4
+
+      - name: JDK Kurulumu (Java 17)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Gradle Wrapper Yetkilendir
+        run: chmod +x gradlew
+
+      - name: Modu Derle (Build)
+        run: ./gradlew build
+
+      - name: Derlenen .jar Dosyasini Kaydet
+        uses: actions/upload-artifact@v4
+        with:
+          name: mod-jar-dosyasi
+          path: build/libs/*.jar
